@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+
+  spring:
+    container_name: smart-booth-spring
+    build: .
+    ports:
+      - "5155:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_HOST: smart-booth-mongo
+      DATABASE_PORT: 27017
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: smart-booth-mongo-secret
+      DATABASE_NAME: smart_booth_prod
+
+    depends_on:
+      - mongo
+
+
+  mongo:
+    container_name: smart-booth-mongo
+    image: mongo:latest
+    restart: always
+    ports:
+      - "3005:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: smart-booth-mongo-secret

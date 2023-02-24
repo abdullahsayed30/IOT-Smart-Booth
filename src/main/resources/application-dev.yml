@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 3005
+      username: root
+      password: iot-booth-mongo-secret
+      authentication-database: admin
+      database: iot_booth_prod
+

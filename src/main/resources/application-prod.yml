@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      host: ${DATABASE_HOST}
+      port: ${DATABASE_PORT}
+      username: ${DATABASE_USERNAME}
+      password: ${DATABASE_PASSWORD}
+      authentication-database: admin
+      database: ${DATABASE_NAME}
+
