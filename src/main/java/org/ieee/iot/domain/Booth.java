@@ -1,14 +1,12 @@
 package org.ieee.iot.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.ieee.iot.domain.devices.Device;
+import org.ieee.iot.domain.devices.Light;
+import org.ieee.iot.domain.sensors.Sensor;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,10 +18,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("houses")
+@Document("booths")
 @JsonIgnoreProperties({"id", "owner"})
-public class House extends BaseDocument{
-    public final static String SEQ_NAME = "houses_seq";
+public class Booth extends BaseDocument{
+    public final static String SEQ_NAME = "booths_seq";
 
     private String name;
     private String description;
@@ -33,10 +31,14 @@ public class House extends BaseDocument{
     private User owner;
 
     @ReadOnlyProperty
-    @DocumentReference(lookup = "{ 'house': ?#{#self._id} }")
-    private List<Room> rooms;
+    @DocumentReference(lookup = "{ 'booth': ?#{#self._id} }")
+    private List<Light> lights;
 
-    public House(Long id, String name, String description, String address, User owner) {
+    @ReadOnlyProperty
+    @DocumentReference(lookup = "{ 'booth': ?#{#self._id} }")
+    private List<Sensor> sensors;
+
+    public Booth(Long id, String name, String description, String address, User owner) {
         super.setId(id);
         this.name = name;
         this.description = description;
@@ -50,7 +52,6 @@ public class House extends BaseDocument{
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", address='" + address + '\'' +
-                ", rooms=" + rooms +
                 '}';
     }
 }

@@ -2,12 +2,11 @@ package org.ieee.iot.service.sensor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ieee.iot.domain.Room;
+import org.ieee.iot.domain.Booth;
 import org.ieee.iot.domain.User;
 import org.ieee.iot.service.auth.AuthenticationFacade;
 import org.ieee.iot.service.user.UserService;
 import org.ieee.iot.utils.db.sequence.SequenceGenerator;
-import org.ieee.iot.domain.Place;
 import org.ieee.iot.domain.sensors.PowerMeterSensorData;
 import org.ieee.iot.domain.sensors.Sensor;
 import org.ieee.iot.domain.sensors.SensorType;
@@ -31,12 +30,11 @@ public class SensorServiceImpl implements SensorService {
     private final SensorRepository sensorRepository;
     private final TempHumSensorRepository tempHumSensorRepository;
     private final PowerConsSensorRepository powerConsSensorRepository;
-    private final UserService userService;
 
     @Override
-    public Sensor createSensor(String name, String description, SensorType type, Room room) {
+    public Sensor createSensor(String name, String description, SensorType type, Booth booth) {
         Long id = sequenceGenerator.generateSequence(Sensor.SEQ_NAME);
-        Sensor sensor = new Sensor(id, name, description, type, room);
+        Sensor sensor = new Sensor(id, name, description, type, booth);
         return sensorRepository.save(sensor);
     }
 
@@ -79,10 +77,6 @@ public class SensorServiceImpl implements SensorService {
 
     private boolean userHasPermissionOverSensor(Sensor sensor) {
         User user = authenticationFacade.getAuthenticatedUser();
-        boolean hasPermission = userService.hasSensor(sensor, user);
-        if (!hasPermission) {
-            log.warn("User {} has no permission to access sensor {}", user.getUsername(), sensor.getId());
-        }
-        return hasPermission;
+        return user.getBooth().equals(sensor.getBooth());
     }
 }

@@ -2,14 +2,13 @@ package org.ieee.iot.domain.devices;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.ieee.iot.domain.Place;
-import org.ieee.iot.domain.Room;
+import org.ieee.iot.domain.Booth;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
 import java.util.Date;
 
 
@@ -38,8 +37,8 @@ public class Light extends Device {
 
     private boolean state;
 
-    public Light(Long id, String name, String description, Room room) {
-        super(id, name, description, room);
+    public Light(Long id, String name, String description, Booth booth) {
+        super(id, name, description, booth);
     }
 
     public Light() {

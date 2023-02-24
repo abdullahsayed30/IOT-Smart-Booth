@@ -1,7 +1,6 @@
 package org.ieee.iot.service.device;
 
-import org.ieee.iot.domain.Place;
-import org.ieee.iot.domain.Room;
+import org.ieee.iot.domain.Booth;
 import org.ieee.iot.domain.devices.Light;
 
 /*************************************************
@@ -9,6 +8,6 @@ import org.ieee.iot.domain.devices.Light;
  ************************************************/
 
 public interface DeviceService {
-    Light createLight(String name, String description, Room room);
+    Light createLight(String name, String description, Booth booth);
     boolean updateLightState(Long lightId, boolean state);
 }

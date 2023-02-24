@@ -2,7 +2,6 @@ package org.ieee.iot.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-
 import java.util.Objects;
 
 

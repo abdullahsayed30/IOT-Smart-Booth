@@ -1,11 +1,9 @@
 package org.ieee.iot.domain.devices;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.ieee.iot.domain.BaseDocument;
-import org.ieee.iot.domain.House;
-import org.ieee.iot.domain.Room;
+import org.ieee.iot.domain.Booth;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 
@@ -21,14 +19,14 @@ public class Device extends BaseDocument {
 
     @DocumentReference
     @JsonIgnore
-    private Room room;
+    private Booth booth;
     private String name;
     private String description;
 
-    public Device(Long id, String name, String description, Room room) {
+    public Device(Long id, String name, String description, Booth booth) {
         super(id);
         this.name = name;
         this.description = description;
-        this.room = room;
+        this.booth = booth;
     }
 }

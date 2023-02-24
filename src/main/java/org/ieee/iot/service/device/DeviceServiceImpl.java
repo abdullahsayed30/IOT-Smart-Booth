@@ -2,21 +2,18 @@ package org.ieee.iot.service.device;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ieee.iot.domain.Room;
+import org.ieee.iot.domain.Booth;
 import org.ieee.iot.domain.User;
 import org.ieee.iot.domain.devices.Device;
-import org.ieee.iot.mqtt.IotTopics;
 import org.ieee.iot.mqtt.MqttGateway;
 import org.ieee.iot.service.auth.AuthenticationFacade;
 import org.ieee.iot.service.user.UserService;
 import org.ieee.iot.utils.db.sequence.SequenceGenerator;
-import org.ieee.iot.domain.Place;
 import org.ieee.iot.domain.devices.Light;
 import org.ieee.iot.repository.devices.LightRepository;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /*************************************************
@@ -31,13 +28,12 @@ public class DeviceServiceImpl implements DeviceService {
     private final SequenceGenerator sequenceGenerator;
     private final MongoTemplate template;
     private final LightRepository lightRepository;
-    private final UserService userService;
     private final MqttGateway mqttGateway;
 
     @Override
-    public Light createLight(String name, String description, Room room) {
+    public Light createLight(String name, String description, Booth booth) {
         Long id = sequenceGenerator.generateSequence(Light.SEQ_NAME);
-        Light light = new Light(id, name, description, room);
+        Light light = new Light(id, name, description, booth);
         return lightRepository.save(light);
     }
 
@@ -57,7 +53,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     private boolean userHasPermissionOverDevice(Device device) {
         User user = authenticationFacade.getAuthenticatedUser();
-        return userService.hasDevice(device, user);
+        return user.getBooth().equals(device.getBooth());
     }
 
 }

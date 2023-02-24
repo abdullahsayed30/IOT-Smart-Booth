@@ -3,16 +3,14 @@ package org.ieee.iot.service.user;
 import lombok.RequiredArgsConstructor;
 import org.ieee.iot.domain.devices.Device;
 import org.ieee.iot.domain.sensors.Sensor;
+import org.ieee.iot.service.booth.BoothService;
 import org.ieee.iot.utils.db.sequence.SequenceGenerator;
-import org.ieee.iot.domain.House;
 import org.ieee.iot.domain.User;
 import org.ieee.iot.helper.req_model.NewUserModel;
 import org.ieee.iot.repository.UserRepository;
-import org.ieee.iot.service.house.HouseService;
 import org.ieee.iot.service.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 
 
@@ -28,9 +26,8 @@ public class UserServiceImpl implements UserService {
     // Auth related
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-
     private final UserRepository userRepository;
-    private final HouseService houseService;
+    private final BoothService boothService;
 
     @Override
     public Map<String, String> signupNewUser(NewUserModel userModel) {
@@ -56,9 +53,7 @@ public class UserServiceImpl implements UserService {
                 userModel.getPhoneNumber()
         );
 
-        House house = houseService.createHouseForNewUser(user);
-
-        user.setHouse(house);
+        user.setBooth(boothService.createBoothForNewUser(user));
         user.setRoles("USER");
 
         userRepository.save(user);
@@ -79,17 +74,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean hasRoom(Long roomId, User user) {
-        return user.getHouse().getRooms().stream().anyMatch(room -> room.getId().equals(roomId));
-    }
-
-    @Override
     public boolean hasDevice(Device device, User user) {
-        return user.getHouse().getRooms().stream().anyMatch(r -> r.equals(device.getRoom()));
+        return user.getBooth().equals(device.getBooth());
     }
 
     @Override
     public boolean hasSensor(Sensor sensor, User user) {
-        return user.getHouse().getRooms().stream().anyMatch(r -> r.equals(sensor.getRoom()));
+        return user.getBooth().equals(sensor.getBooth());
     }
 }

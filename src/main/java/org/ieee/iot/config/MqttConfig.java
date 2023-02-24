@@ -67,7 +67,6 @@ public class MqttConfig {
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(2);
         adapter.setOutputChannel(mqttInputChannel());
-//        adapter.set
 
         return adapter;
     }
