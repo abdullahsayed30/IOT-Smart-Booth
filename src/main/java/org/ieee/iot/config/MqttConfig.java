@@ -30,7 +30,7 @@ public class MqttConfig {
     private static final String MQTT_SERVER = "tcp://144.24.219.44:1888";
     private static final String MQTT_USERNAME = "iot_spring_client";
     private static final String MQTT_PASSWORD = "iot_spring_client_secret";
-    private static final String MQTT_CLIENT_ID = "test_spring_mqtt_server";
+    private static final String MQTT_CLIENT_ID = "spring_mqtt_server";
 
     private final MqttMessageReceiver mqttMessageReceiver;
 
@@ -63,7 +63,7 @@ public class MqttConfig {
                         MQTT_CLIENT_ID + "_in", mqttClientFactory(),
                         "/#");
 
-        adapter.setCompletionTimeout(20000);
+        adapter.setCompletionTimeout(30000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(2);
         adapter.setOutputChannel(mqttInputChannel());

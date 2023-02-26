@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.ieee.iot.domain.Booth;
 import org.ieee.iot.domain.User;
 import org.ieee.iot.domain.devices.Device;
+import org.ieee.iot.event.BoothUpdateEvent;
 import org.ieee.iot.mqtt.MqttGateway;
 import org.ieee.iot.service.auth.AuthenticationFacade;
 import org.ieee.iot.service.user.UserService;
 import org.ieee.iot.utils.db.sequence.SequenceGenerator;
 import org.ieee.iot.domain.devices.Light;
 import org.ieee.iot.repository.devices.LightRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -29,12 +31,19 @@ public class DeviceServiceImpl implements DeviceService {
     private final MongoTemplate template;
     private final LightRepository lightRepository;
     private final MqttGateway mqttGateway;
+    private final ApplicationEventPublisher eventPublisher;
+
+
+    private void pubBoothEvent() {
+        eventPublisher.publishEvent(new BoothUpdateEvent(this));
+    }
 
     @Override
     public Light createLight(String name, String description, Booth booth) {
         Long id = sequenceGenerator.generateSequence(Light.SEQ_NAME);
-        Light light = new Light(id, name, description, booth);
-        return lightRepository.save(light);
+        Light light = lightRepository.save(new Light(id, name, description, booth));
+        pubBoothEvent();
+        return light;
     }
 
     @Override
@@ -46,6 +55,7 @@ public class DeviceServiceImpl implements DeviceService {
                     .matching(where("id").is(lightId))
                     .apply(new Update().set("state", state))
                     .first();
+            pubBoothEvent();
             return true;
         }
         return false;
