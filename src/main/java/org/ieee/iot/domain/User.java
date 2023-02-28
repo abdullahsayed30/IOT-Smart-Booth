@@ -69,6 +69,11 @@ public class User extends BaseDocument{
         return firstName + " " + lastName;
     }
 
+    public boolean isAdmin(){
+        return roles.contains("ADMIN");
+    }
+
+
     @Override
     public String toString() {
         return "User{" +

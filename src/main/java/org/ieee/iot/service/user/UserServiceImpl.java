@@ -62,13 +62,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, String> loginUser(String username, String password) {
+    public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
+
+        return user;
+    }
+
+    @Override
+    public Map<String, String> loginUserT(String username, String password) {
+        User user = loginUser(username, password);
 
         return tokenService.generateTokens(user);
     }

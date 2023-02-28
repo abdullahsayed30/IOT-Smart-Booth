@@ -13,7 +13,8 @@ import java.util.Map;
 
 public interface UserService {
     Map<String, String> signupNewUser(NewUserModel userModel);
-    Map<String, String> loginUser(String username, String password);
+    User loginUser(String username, String password);
+    Map<String, String> loginUserT(String username, String password);
     boolean hasDevice(Device device, User user);
     boolean hasSensor(Sensor sensor, User user);
 }

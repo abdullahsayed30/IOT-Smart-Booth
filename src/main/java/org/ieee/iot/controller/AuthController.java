@@ -15,7 +15,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -49,7 +51,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Response> login(@Valid @RequestBody LoginModel loginModel) {
-        Map<String, String> tokens = authServiceImpl.loginUser(loginModel.getUsername(), loginModel.getPassword());
+        Map<String, String> tokens = authServiceImpl.loginUserT(loginModel.getUsername(), loginModel.getPassword());
 
         return ResponseEntity.ok(
                 Response.builder()
@@ -60,6 +62,25 @@ public class AuthController {
                         .data(tokens)
                         .build()
         );
+    }
+
+    @PostMapping("/login/EMQX")
+    public ResponseEntity<Map<String, String>> loginEMQX(@Valid @RequestBody LoginModel loginModel) {
+        Map<String, String> responseBody = new HashMap<>();
+
+        User user;
+        try {
+            user = authServiceImpl.loginUser(loginModel.getUsername(), loginModel.getPassword());
+        }
+        catch (Exception e) {
+            responseBody.put("result", "deny");
+            return ResponseEntity.ok(responseBody);
+        }
+
+        responseBody.put("result", "allow");
+        responseBody.put("is_superuser", user.isAdmin() ? "true" : "false");
+
+        return ResponseEntity.ok(responseBody);
     }
 
     @PostMapping("/refresh")
