@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/auth/login/EMQX").permitAll()
                 .requestMatchers("/ws").permitAll()
                 .requestMatchers("/api/v1/camera/**").permitAll()
                 .anyRequest().authenticated()
