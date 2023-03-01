@@ -80,7 +80,7 @@ public class AuthController {
         responseBody.put("result", "allow");
         responseBody.put("is_superuser", user.isAdmin() ? "true" : "false");
 
-        return ResponseEntity.ok(responseBody);
+        return ResponseEntity.ok().header("Content-Type", "application/json").body(responseBody);
     }
 
     @PostMapping("/refresh")
