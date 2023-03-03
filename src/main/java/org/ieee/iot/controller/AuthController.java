@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class AuthController {
             user = authServiceImpl.loginUser(loginModel.getUsername(), loginModel.getPassword());
         }
         catch (Exception e) {
-            responseBody.put("result", "deny");
+            responseBody.put("result", "ignore");
             return ResponseEntity.ok(responseBody);
         }
 
